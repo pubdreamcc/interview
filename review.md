@@ -254,4 +254,45 @@ Last-Modified / If-Modified-Since & Etag / If-None-Match
 > DNS解析优化：DNS缓存优化，DNS预加载策略
 > 服务端优化：redis缓存，gzip压缩等，数据存储优化
 > 浏览器下载，解析，渲染页面优化：html文件结构简洁，css文件结构优化，js 代码位置等
-23. 
+23. 大量图片加载优化，(延迟加载 & 减少图片文件大小)
+24. 输入 url 到页面展现的过程
+> DNS 解析 > 建立tcp连接 > http请求&服务器响应数据 > 浏览器下载，解析，渲染页面。
+25. 浏览器动画性能优化
+> 精简DOM结构， 合理布局； 使用transform 替代left，right，减少重排的次数；使用更友好的 requestAnimationFrame 语法。
+26. 模块化机制
+> commonJS, AMD, CMD, ES6 module
+27. tree-shaking
+28. uglifyJS 原理
+> code => AST; AST -> 更加精简的AST； AST -》 code
+29. babel 原理, babel plugin 
+30. webpack 
+31. webpack plugin, loader 机制
+32. React 合成事件
+33. virtual DOM
+34. setState 过程
+> setState 是异步还是同步？
+> 在 React 合成事件中/ 生命周期钩子中 是异步的， 在 setTimeout/ 原生事件中 是同步的。
+
+> 直接传递对象的setstate会被合并成一次
+> 使用函数传递state不会被合并
+35. React fiber
+> 1. React的渲染分为协调和提交两个阶段，协调就是遍历dom树，进行domdiff，收集差异的阶段。提交就是修改真实dom，进行页面绘制的阶段。
+> 2. React 会递归遍历节点，比对VirtualDOM树，找出需要变动的节点，然后同步更新它们。这个过程 React 称为Reconcilation(协调)
+在Reconcilation期间，React 会一直占用着浏览器资源，一则会导致用户触发的事件得不到响应, 二则会导致掉帧，用户可能会感觉到卡顿
+> 3. fiber使用链表数据结构，通过浏览器requestIdleCallbackapi，让协调过程实现了可中断执行，分片完成协调任务
+在浏览器空闲时去执行协调过程，遍历节点，收集变动的节点，避免了界面卡顿
+
+36. HOC (高阶组件)
+37. React 错误处理 (Error boundaries, componentDidCatch)
+38. React 性能优化
+* PureComponent/ShouldComponentUpdate
+* React.memo (函数组件)
+* 善用 React.useMemo
+* 合理使用 React.useCallback
+* 谨慎使用 Context，Context 完全没有任何方案可以避免无用的渲染，我们无法阻止 Context 触发的 render。
+* 小心使用 Redux
+
+39. Redux
+> 动作 和状态 统一管理（有什么动作给你什么状态）
+> 每个state 变化可以监测
+> ui 只负责渲染页面，数据管理交给 redux
