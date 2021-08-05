@@ -296,3 +296,251 @@ Last-Modified / If-Modified-Since & Etag / If-None-Match
 > 动作 和状态 统一管理（有什么动作给你什么状态）
 > 每个state 变化可以监测
 > ui 只负责渲染页面，数据管理交给 redux
+
+40. 编程题目
+```js
+
+String.prototype.trim1 = function () {
+  const str =  this.replace(/^\s*/, '').replace(/\s*$/, '');
+  return str;
+}
+
+// deepClone
+// 乞丐版本
+JSON.stringify(JSON.parse(target));
+
+// 基础版本
+function clone (target) {
+  let targetObj = {};
+  for (const key in target) {
+    targetObj[key] = target[key];
+  }
+  return targetObj;
+
+}
+
+// 递归
+function clone (target) {
+  if (typeof target === 'obejct') {
+    let targetObj = {};
+    for (const key in target) {
+      targetObj[key] = clone(target[key]);
+    }
+    return targetObj;
+  } else {
+    return target;
+  }
+}
+
+// 考虑数组
+
+function clone (target) {
+  if (typeof target === 'obejct') {
+    // 加了种判断数组的类型
+    let targetObj = Array.isArray(target) ? [] : {};
+    for (const key in target) {
+      targetObj[key] = clone(target[key]);
+    }
+    return targetObj;
+  } else {
+    return target;
+  }
+}
+
+
+// curry (函数柯里化)
+
+function curry (fn, ...args) {
+  return args.length >= fn.length ? fn(...args) : (...args1) => curry(fn, ...args, ...args1);
+}
+
+// 大数相加 (转化成字符串的形式)
+
+function add (a, b) {
+  // 将a，b 转换为字符串
+  a = a.toString();
+  b = b.toString();
+  // 补齐长度
+  let maxLength = Math.max(a.length, b.length);
+  a = a.padStart(maxLength, 0);
+  b = b.padStart(maxLength, 0);
+  // 开始相加
+  let t = 0, sum = '', f = 0;
+  for (let i = maxLength - 1; i >= 0; i--) {
+    t = parseInt(a[i]) + parseInt(b[i]) + f;
+    f = Math.floor(t / 10); // 进位
+    sum += t % 10; 
+  }
+  if (f === 1) {
+    sum += '1' + sum;
+  }
+  return Number(sum);
+}
+
+// 小数相加减操作，基本思想：
+// 小数 -》 转化为 整数 然后操作，再转换回来 （a * m + b * m）/ m
+
+// 数组拍平 (实现flat())
+
+Array.prototype.myFlat = function (count = 1) {
+  if (Number(count) <= 0) {
+    return this;
+  }
+    let arr = [];
+    // 利用 forEach 方法会跳过空位
+  this.forEach(value => {
+    if (Array.isArray(value)) {
+      arr = arr.concat(value.myFlat(count - 1));
+    } else {
+      arr.push(value);
+    }
+  });
+
+  return arr;
+}
+
+// 防抖 函数
+
+function debounce (fun, await) {
+  var timer;
+  return function () {
+    if (timer) clearTimeout(timer);
+    timer = setTimeout(fun, await);
+  }
+}
+
+// 节流
+// 定时器版
+
+function throttle (fun, await) {
+  var timer;
+
+  return function () {
+    if (!timer) {
+      timer = setTimeout(fun, wait);
+      timer = null;
+    }
+  }
+}
+
+// 时间戳版本
+
+function throttle (fun, await) {
+  let previous = 0;
+
+  return function () {
+    let now =  Date.now();
+    if (now - previous > wait) {
+      fun();
+      previous = now;
+    }
+  }
+}
+// 反转字符串（双指针）
+
+function reverseString（s）{
+  let left = 0;
+  let right = s.length-1;
+  while(left < right) {
+    //原地修改数组
+    [s[left], s[right]] = [s[right], s[left]];
+    left++;
+    right--;
+  }
+  return s;
+}
+
+// 数组去重，双层内外循环
+// indexOf // ES6 Set // 先排序，后去重。。。
+
+function unique (arr) {
+  const res = [];
+  for (let i = 0, s = arr.length; i < s; i++) {
+    const curr = arr[i];
+    if (res.indexOf(curr) === -1) {
+      res.push(curr);
+    }
+
+  }
+  return res;
+}
+// 实现数字千分位分隔符
+function formatNum (num) {
+  const arr  = num.toString().split('.');
+  const const arr1 = arr[0].split('').reverse();
+  const res = []
+  for (let i = 0, s = arr1.length; i < s; i++) {
+    if (i % 3 === 0 && i !== 0) {
+      res.push(',');
+    }
+    res.push(arr1[i]);
+  }
+  res.reverse();
+  if (arr[1]) {
+    return res.join('').concat('.' + arr[1]);
+  } else {
+    return res.join('');
+  }
+}
+
+// 或者使用 js 内置 toLocalString()
+
+// 判断回文数字
+
+var isPalindrome = function(x) {
+    if (x < 0) return false;
+    if (x === 0) return true;
+    const number = +(String(x).split('').reverse().join(''));
+    if (number === x) return true;
+    return false
+}
+
+// 判断一个数为素数
+
+// 质数/素数：只能被自身或者1 整除
+function isPrimeNumber(num) {
+  for (let i = 2; i <= Math.sqrt(num); i++) {
+    if (num % i === 0) {
+      return false
+    }
+  }
+  return true;
+}
+
+var countPrimes = function(n) {
+    if(n<=2){
+        return 0
+    }
+    let count=0
+    //厄拉多塞筛法
+    let flag=new Array(n).fill(0).map(v=>true)
+    for(let num=2;num<n;num++){
+        if(flag[num]){
+            count++
+            for(let help=num+num;help<n;help+=num){
+                flag[help]=false
+            }
+        }
+    }
+    return count
+}
+
+```
+
+41. 基础
+
+* 进程 & 线程
+> 进程：计算资源分配调度的基本单位。 线程：是操作系统能够进行运算调度的最小单位
+* 进程间通信
+* 数据链路层-》 网络层-》传输层 -》 应用层
+> (物理层 -》 数据链路层 -》 网络层 -》 传输层 -》 会话层 =》 表示层 =》 应用层)
+* http1.1 http2 http3 （串行请求 =》 并行请求(头部压缩)（对头阻塞问题） =》 udp）
+> HTTP/1.1中的pipeline中如果有一个请求block了，那么队列后请求也统统被block住了；HTTP/2 多请求复用一个TCP连接，一旦发生丢包，就会block住所有的HTTP请求。这样的问题很讨厌。好像基本无解了。
+* https：HTTP下加入SSL层
+* tcp 三次握手，四次挥手
+* websocket
+* 常用设计模式
+* MVVM
+> MVC 模式，单向通信，modal（数据）， view（视图）， controller（业务逻辑） 视图交互 -》 controller -> modal（改变数据） -》 视图更新（view）  频繁操作dom，代码量大，难以维护
+> MVVM 模式， 数据双向绑定 ViewModel 通过双向数据绑定把 View 层和 Model 层连接了起来，ViewModel里面包含DOM Listeners和Data Bindings，DOM Listeners和Data Bindings是实现双向绑定的关键。DOM Listeners监听页面所有View层DOM元素的变化，当发生变化，Model层的数据随之变化；Data Bindings监听Model层的数据，当数据发生变化，View层的DOM元素随之变化。
+> 常用框架 Vue，React，Angular
