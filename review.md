@@ -544,3 +544,87 @@ var countPrimes = function(n) {
 > MVC 模式，单向通信，modal（数据）， view（视图）， controller（业务逻辑） 视图交互 -》 controller -> modal（改变数据） -》 视图更新（view）  频繁操作dom，代码量大，难以维护
 > MVVM 模式， 数据双向绑定 ViewModel 通过双向数据绑定把 View 层和 Model 层连接了起来，ViewModel里面包含DOM Listeners和Data Bindings，DOM Listeners和Data Bindings是实现双向绑定的关键。DOM Listeners监听页面所有View层DOM元素的变化，当发生变化，Model层的数据随之变化；Data Bindings监听Model层的数据，当数据发生变化，View层的DOM元素随之变化。
 > 常用框架 Vue，React，Angular
+
+## 算法
+```js
+function lib (n) {
+  if (n <= 1) return n;
+  return lib(n -1) + lib(n-2);
+}
+
+function mergeLists (l1, l2) {
+  const res = new ListNode(0);
+  let p = res;
+  let [p1, p2] = [l1, l2];
+  while (p1 && p2) {
+    if (p1.val >= p2.val) {
+      p.next = p2;
+      p2 = p2.next;
+    } else {
+      p.next = p1;
+      p1 = p1.next;
+    }
+    p = p.next;
+  }
+
+  p.next = p1 ? p1 : p2;
+  return res.next;
+}
+
+function reverseList (head) {
+  let pre = null;
+  let curr = head;
+
+  while (curr) {
+    const next = curr.next;
+    curr.next = pre;
+    pre = curr;
+    curr = next
+  }
+ // 返回头部节点
+  return pre;
+}
+
+// 链表是否有环 (打标记)
+function hasCycle (head) {
+  while (head) {
+    if (head.tag) return true;
+    head.tag = true;
+    head = head.next;
+  }
+
+  return false;
+}
+
+// 找出数组中 第 k 个 最大的数
+function fun (nums, k) {
+  nums.sort((a, b) => a - b);
+  return nums[nums.length - k];
+}
+
+// 有效括号
+
+function isValidString(string) {
+  // 定义两个数组，分别存放 '(', '*' 在 字符串中的位置
+  let left = [], star = [];
+  for (let i = 0; i< string.length; i++) {
+    if (string[i] === '(') left.push(i);
+    if (string[i] === '*') star.push(i);
+    if (string[i] === ')') {
+      if (left.length === 0) {
+        if (star.length === 0) return false;
+          star.pop();
+      } else {
+        left.pop();
+      }
+    }
+  }
+  if (left.length > star.length) return false;
+  while (left.length && star.length) {
+    if (left.pop() > star.pop()) {
+      return false;
+    }
+  }
+  return true;
+}
+```
