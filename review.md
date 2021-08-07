@@ -627,4 +627,70 @@ function isValidString(string) {
   }
   return true;
 }
+
+// 使用二分法查找 x 的平方根
+function mySqrt (x) {
+  if (x <= 1) return x;
+  let l = 2, r = Math.floor(x / 2), mid = 0;
+  while (l <= r) {
+    mid = Math.floor((r + l) / 2);
+    if (mid * mid > x) {
+      r = mid - 1;
+    } else {
+      l = mid + 1;
+    }
+  }
+
+  return r;
+
+}
+
+// 爬楼梯问题
+
+// 动态规划，找规律
+
+var climbStairs = function(n) {
+    const arr = new Array(n + 1).fill(0);
+    arr[0]  = 1;
+    arr[1] = 1;
+    for (let i = 2; i < n + 1; i++) {
+        arr[i] = arr[i-1] + arr[i-2];
+    }
+
+    return arr[n];
+   
+};
+
+// 最短距离 // 中心扩展法
+
+function shortestToChar (s, c) {
+  const res = new Array(s.length).fill(0);
+  for (let i = 0; i < s.length; i++) {
+    if (s[i] === c) continue;
+    let l = i, r = i, shortest = Infinity;
+
+    while (l >= 0) {
+      if (s[l] === c) {
+        shortest = Math.min(i - l, shortest);
+        break;
+      }
+    }
+    while (r < s.length) {
+      if (s[r] === c) {
+        shortest = Math.min(r - i, shortest);
+        break;
+      }
+    }
+    res[i] = shortest;
+   }
+   return res;
+}
+
+// 反转二叉树 递归，数组解构
+
+function invertTree (root) {
+  if (!root) return null;
+  [root.left, root.right] = [invertTree(root.right), invertTree(root.left)];
+  return root;
+}
 ```
